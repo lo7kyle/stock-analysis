@@ -1,0 +1,25 @@
+Sub MacroCheck():
+    Dim Hello As String
+    Hello = "Hello World"
+    
+    MsgBox (Hello)
+
+End Sub
+
+Sub DQAnalysis():
+
+    Worksheets("DQ Analysis").Activate
+    
+    'This block is just practice of using Range instead of Cells
+    'Range("A1").Value = "Apple (Ticker: APPL)"
+    'Range("A3").Value = "Year"
+    'Range("B3").Value = "Total Daily Volume"
+    'Range("C3").Value = "Return"
+    
+    'Creates a header row
+    Cells(1, 1).Value = "DAQO (Ticker: DQ)"
+    Cells(3, 1).Value = "Year"
+    Cells(3, 2).Value = "Total Daily Volume"
+    Cells(3, 3).Value = "Return"
+    
+End Sub
