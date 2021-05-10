@@ -86,7 +86,13 @@ yearValue = inputBox("What year would you like to run the analysis on?")
 End Sub
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 Sub AllStocksAnalysis()
-
+    'Calling in yearValue subroutine
+    Dim yearValue As Variant
+    Dim startTime As Single
+    Dim endTime As Single
+    
+    yearValue = yearValueAnalysis()
+    startTime = Timer
     Worksheets("All Stocks Analysis").Activate
 'Creating Headers
     Cells(1, 1).Value = "All Stocks (" + yearValue + ")"
@@ -144,7 +150,9 @@ Sub AllStocksAnalysis()
             Cells(i + 4, 2).Value = totalVolume
             Cells(i + 4, 3).Value = (last_price / first_price) - 1
     Next i
-        
+    
+    endTime = Timer
+    MsgBox "This code ran in " & (endTime - startTime) & "Seconds for the year " & (yearValue)
         
 End Sub
 
@@ -210,8 +218,8 @@ Sub ClearWorksheet()
 
 End Sub
 
-Sub yearValueAnalysis()
-yearValue = inputBox("What year would you like to run the analysis on?")
-
-End Sub
+Function yearValueAnalysis()
+yearValue = inputBox("What year would you like to run the analysis on?", "Enter 2017 or 2018", 2018)
+yearValueAnalysis = yearValue
+End Function
 
