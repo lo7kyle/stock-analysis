@@ -6,7 +6,7 @@ Sub MacroCheck():
 
 End Sub
 
-Sub DQAnalysis():
+Sub DQAnalysis1():
 
     Worksheets("DQ Analysis").Activate
     
@@ -22,4 +22,119 @@ Sub DQAnalysis():
     Cells(3, 2).Value = "Total Daily Volume"
     Cells(3, 3).Value = "Return"
     
+End Sub
+
+Sub DQAnalysis2():
+    
+    Worksheets("2018").Activate
+    'Prints out the headers of the 2018 sheet
+    'For i = 1 To 8
+        'MsgBox (Cells(1, i))
+    'Next i
+    
+    rowStart = 2
+    totalVolume = 0
+    Dim first_price As Double
+    Dim last_price As Double
+    'Hard limit on rowEnd, but we want a scalable rowEnd
+    'rowEnd = 3013
+    'rowEnd code taken from https://stackoverflow.com/questions/18088729/row-count-where-data-exists
+    rowEnd = Cells(Rows.Count, "A").End(xlUp).Row
+
+    For i = rowStart To rowEnd
+        'increase totalVolume if ticker is "DQ"
+        If Cells(i, 1).Value = "DQ" Then
+            totalVolume = totalVolume + Cells(i, 8).Value
+        End If
+    Next i
+    
+' This prints out the totalVolume of "DQ"
+MsgBox (totalVolume)
+
+    Worksheets("DQ Analysis").Activate
+    Cells(4, 1).Value = 2018
+    Cells(4, 2).Value = totalVolume
+
+    Worksheets("2018").Activate
+    'To find the yearly return we must find the first closing price and last closing  price
+    'This for loops finds the starting price
+    For i = rowStart To rowEnd
+        'Checks if the current row is the First Row of DQ's Data, if so then set current closing price as the first price
+        ' Does this by having condition of cell = DQ and there is no previous DQ then it has to be first closing price
+        If Cells(i, 1).Value = "DQ" And Cells(i - 1, 1).Value <> "DQ" Then
+           first_price = Cells(i, 6).Value
+        End If
+        ' checks if current row is DQ and if there are no other DQ after it
+        If Cells(i, 1).Value = "DQ" And Cells(i + 1, 1).Value <> "DQ" Then
+           last_price = Cells(i, 6).Value
+        End If
+    Next i
+    
+    Worksheets("DQ Analysis").Activate
+' Prints out yearly return
+MsgBox ((last_price / first_price) - 1)
+    'we set the yearly return inside cell
+    Cells(4, 3).Value = (last_price / first_price) - 1
+    
+               
+           
+End Sub
+
+Sub AllStocksAnalysis()
+
+    Worksheets("All Stocks Analysis").Activate
+'Creating Headers
+    Cells(1, 1).Value = "All Stocks (2018)"
+    Cells(3, 1).Value = "Ticker"
+    Cells(3, 2).Value = "Total Daily Volume"
+    Cells(3, 3).Value = "Return"
+    Dim tickers(12) As String
+    tickers(0) = "AY"
+    tickers(1) = "CSIQ"
+    tickers(2) = "DQ"
+    tickers(3) = "ENPH"
+    tickers(4) = "FSLR"
+    tickers(5) = "HASI"
+    tickers(6) = "JKS"
+    tickers(7) = "RUN"
+    tickers(8) = "SEDG"
+    tickers(9) = "SPWR"
+    tickers(10) = "TERP"
+    tickers(11) = "VSLR"
+
+    Worksheets("2018").Activate
+    totalVolume = 0
+    rowStart = 2
+    rowEnd = Cells(Rows.Count, "A").End(xlUp).Row
+    Dim first_price As Double
+    Dim last_price As Double
+    
+    For i = 0 To 11
+    'Everytime we loop in the outer loop we want to be in the 2018 sheet
+        Worksheets("2018").Activate
+        ticker = tickers(i)
+        
+        For j = rowStart To rowEnd
+        'increase totalVolume if ticker is "DQ"
+            If Cells(j, 1).Value = ticker Then
+                totalVolume = totalVolume + Cells(j, 8).Value
+            End If
+        'Checks if the current row is the First Row of DQ's Data, if so then set current closing price as the first price
+        ' Does this by having condition of cell = DQ and there is no previous DQ then it has to be first closing price
+            If Cells(j, 1).Value = ticker And Cells(j - 1, 1).Value <> ticker Then
+               first_price = Cells(j, 6).Value
+            End If
+        ' checks if current row is DQ and if there are no other DQ after it
+            If Cells(j, 1).Value = ticker And Cells(j + 1, 1).Value <> ticker Then
+               last_price = Cells(j, 6).Value
+            End If
+        Next j
+        'take the result from loop j and print it out in the All Stock Analysis sheet
+            Worksheets("All Stocks Analysis").Activate
+            Cells(i + 4, 1).Value = ticker
+            Cells(i + 4, 2).Value = totalVolume
+            Cells(i + 4, 3).Value = (last_price / first_price) - 1
+    Next i
+        
+        
 End Sub
