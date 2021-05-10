@@ -1,12 +1,10 @@
-Sub MacroCheck():
-    Dim Hello As String
-    Hello = "Hello World"
-    
-    MsgBox (Hello)
+'Sub MacroCheck():
+    'Dim Hello As String
+    'Hello = "Hello World"
+    'MsgBox (Hello)
+'End Sub
 
-End Sub
-
-Sub DQAnalysis1():
+Sub DQAnalysis():
 
     Worksheets("DQ Analysis").Activate
     
@@ -22,11 +20,8 @@ Sub DQAnalysis1():
     Cells(3, 2).Value = "Total Daily Volume"
     Cells(3, 3).Value = "Return"
     
-End Sub
-
-Sub DQAnalysis2():
     
-    Worksheets("2018").Activate
+    Worksheets(yearValue).Activate
     'Prints out the headers of the 2018 sheet
     'For i = 1 To 8
         'MsgBox (Cells(1, i))
@@ -55,7 +50,7 @@ MsgBox (totalVolume)
     Cells(4, 1).Value = 2018
     Cells(4, 2).Value = totalVolume
 
-    Worksheets("2018").Activate
+    Worksheets(yearValue).Activate
     'To find the yearly return we must find the first closing price and last closing  price
     'This for loops finds the starting price
     For i = rowStart To rowEnd
@@ -76,18 +71,29 @@ MsgBox ((last_price / first_price) - 1)
     'we set the yearly return inside cell
     Cells(4, 3).Value = (last_price / first_price) - 1
     
-               
-           
+                    
 End Sub
 
+Sub ClearWorksheet()
+
+    Cells.Clear
+
+End Sub
+
+Sub yearValueAnalysis()
+yearValue = inputBox("What year would you like to run the analysis on?")
+
+End Sub
+----------------------------------------------------------------------------------------------------------------------------------------------------------
 Sub AllStocksAnalysis()
 
     Worksheets("All Stocks Analysis").Activate
 'Creating Headers
-    Cells(1, 1).Value = "All Stocks (2018)"
+    Cells(1, 1).Value = "All Stocks (" + yearValue + ")"
     Cells(3, 1).Value = "Ticker"
     Cells(3, 2).Value = "Total Daily Volume"
     Cells(3, 3).Value = "Return"
+'Create an arry to store all the tickers
     Dim tickers(12) As String
     tickers(0) = "AY"
     tickers(1) = "CSIQ"
@@ -101,17 +107,20 @@ Sub AllStocksAnalysis()
     tickers(9) = "SPWR"
     tickers(10) = "TERP"
     tickers(11) = "VSLR"
-
-    Worksheets("2018").Activate
+'change to sheet we will be doing our analysis in
+    Worksheets(yearValue).Activate
     totalVolume = 0
     rowStart = 2
+    'rowEnd code taken from https://stackoverflow.com/questions/18088729/row-count-where-data-exists
     rowEnd = Cells(Rows.Count, "A").End(xlUp).Row
     Dim first_price As Double
     Dim last_price As Double
     
     For i = 0 To 11
-    'Everytime we loop in the outer loop we want to be in the 2018 sheet
-        Worksheets("2018").Activate
+    'Everytime we loop in the outer loop we want to be back in the sheet we want to do analysis in
+        Worksheets(yearValue).Activate
+        totalVolume = 0
+        'looping through the tickers
         ticker = tickers(i)
         
         For j = rowStart To rowEnd
@@ -138,3 +147,71 @@ Sub AllStocksAnalysis()
         
         
 End Sub
+
+
+Sub formatAllStocksAnalysisTable()
+'Formatting
+Worksheets("All Stocks Analysis").Activate
+'Bolds
+Range("A3:C3").Font.Bold = True
+'bottom line
+Range("A3:C3").Borders(xlEdgeBottom).LineStyle = xlContinuous
+Range("C4:C15").Borders(xlInsideHorizontal).LineStyle = xlContinuous
+'Italic
+Range("A3:C3").Font.Italic = True
+' used to disply only a significant digit with commas
+Range("B4:B15").NumberFormat = "#,##0"
+' used to convert to percentage
+Range("C4:C15").NumberFormat = "0.00%"
+Columns("B").AutoFit
+'Defining your range
+Dim returnRange As Range
+Set returnRange = Range("C4:C15")
+    For Each cell In returnRange
+    ' if negative then turn the font red
+        If cell < 0 Then
+            cell.Font.ColorIndex = 30
+            cell.Interior.ColorIndex = 15
+    'else if positive then green
+        ElseIf cell > 0 Then
+            cell.Font.ColorIndex = 10
+            cell.Interior.ColorIndex = 19
+    'else clears it
+        Else
+        cell.Interior.Color = xlNone
+        End If
+    Next
+
+End Sub
+
+Sub checkers()
+Worksheets("All Stocks Analysis").Activate
+Dim counter As Integer
+counter = 0
+
+    For i = 1 To 8
+        For j = 1 To 8
+            If counter Mod 2 = 0 Then
+            Cells(i + 3, j + 6).Interior.ColorIndex = 1
+            Else
+            Cells(i + 3, j + 6).Interior.ColorIndex = 2
+        End If
+        counter = counter + 1
+       Next j
+        counter = counter + 1
+    Next i
+            
+
+End Sub
+
+Sub ClearWorksheet()
+
+    Cells.Clear
+
+End Sub
+
+Sub yearValueAnalysis()
+yearValue = inputBox("What year would you like to run the analysis on?")
+
+End Sub
+
