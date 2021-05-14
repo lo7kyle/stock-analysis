@@ -283,10 +283,14 @@ There were many challenges and difficulties that I created for myself. I initial
 From the results we can clearly see that the Refactored code is a lot faster than the nested for-loop code. See below for a comparison. The main takeaway from these results is that we want to avoid any code that will take an exponential amount of time to iterate through the loops, but at the same time make it as robust as possible. 
 
 ![Original Nested 2017 Runtime](https://github.com/lo7kyle/stock-analysis/blob/main/Resources/Nested%20Loop%202017_Time.PNG)
+*Fig. 1: Original Nested 2017 Runtime
 ![Refactored 2017 Runtime](https://github.com/lo7kyle/stock-analysis/blob/main/Resources/Refactored%202017_Time.PNG)
+*Fig. 2: Refactored Nested 2018 Runtime
 
 ![Original Nested 2018 Runtime](https://github.com/lo7kyle/stock-analysis/blob/main/Resources/Nested%20Loop%202018_Time.PNG)
+*Fig. 3: Original Nested 2017 Runtime
 ![Refactored 2018 Runtime](https://github.com/lo7kyle/stock-analysis/blob/main/Resources/Refactored%202018_Time.PNG)
+*Fig. 4: Refactored Nested 2018 Runtime
 
 ## Summary
 ### Advantages Vs Disadvantages Original
